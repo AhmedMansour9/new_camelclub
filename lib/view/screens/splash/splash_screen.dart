@@ -31,12 +31,12 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    if (!Provider.of<SplashProvider>(context, listen: false).isFirstVisit())
-      Provider.of<LocalizationProvider>(context, listen: false)
-          .setLanguage(Locale(
-        "ar",
-        "SA",
-      ));
+    // if (!Provider.of<SplashProvider>(context, listen: false).isFirstVisit()) {
+    //   Provider.of<LocalizationProvider>(context, listen: false).setLanguage(const Locale(
+    //     "ar",
+    //     "SA",
+    //   ));
+    // }
     bool _firstTime = true;
     _onConnectivityChanged = Connectivity()
         .onConnectivityChanged
@@ -49,7 +49,6 @@ class _SplashScreenState extends State<SplashScreen> {
             : _globalKey.currentState?.hideCurrentSnackBar();
         showCustomSnackBar( isNotConnected ? getTranslated('no_connection', context) :
         getTranslated('connected',context), context);
-
         if (!isNotConnected) {
           _route();
         }
@@ -72,29 +71,33 @@ class _SplashScreenState extends State<SplashScreen> {
   void _route() {
 
             Timer(Duration(seconds: 3), () async {
-              Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  Routes.getLanguageRoute("1"),
-                      (route) => false);
+              // Navigator.pushNamedAndRemoveUntil(
+              //     context,
+              //     Routes.getLanguageRoute("1"),
+              //         (route) => false);
 
-              // if (Provider.of<AuthProvider>(context, listen: false)
-              //     .isLoggedIn()) {
-              //   Provider.of<AuthProvider>(context, listen: false).updateToken();
-              //   await Provider.of<WishListProvider>(context, listen: false)
-              //       .initWishList(context);
-              //   Navigator.pushNamedAndRemoveUntil(
-              //       context, Routes.getMainRoute(), (route) => false);
-              // } else {
-              //   Navigator.pushNamedAndRemoveUntil(
-              //       context,
-              //       !Provider.of<SplashProvider>(context, listen: false)
-              //               .isFirstVisitOnBoarding()
-              //           ? Routes.getOnBoardingRoute()
-              //           : Routes.getLanguageRoute("1"),
-              //       (route) => false);
-              // }
+              if (Provider.of<AuthProvider>(context, listen: false)
+                  .isLoggedIn()) {
+               if(Provider.of<AuthProvider>(context, listen: false).getUserType() == "client"){
+                 Navigator.pushNamedAndRemoveUntil(
+                     context, Routes.getMainCLientRoute(), (route) => false);
+               }else {
+                 Navigator.pushNamedAndRemoveUntil(
+                     context, Routes.getMainRoute(), (route) => false);
+               }
+
+              } else {
+                Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    !Provider.of<SplashProvider>(context, listen: false)
+                            .isFirstVisitLanguage()
+                        ? Routes.getLanguageRoute("")
+                        : Routes.getChooseUserRoute(),
+                        (route) => false);
+              }
             }
             );
+
 
   }
 
@@ -103,13 +106,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // String languageCode = Localizations.localeOf(context).languageCode;
     // print('ssssssss + $languageCode');
-    return ScaffoldMessenger(
-      key: _globalKey,
-
-      child: Scaffold(
-        //key: _globalKey,
-        backgroundColor: ColorResources.COLOR_DARKPRIMARY,
-        body: Center(
+    return Scaffold(
+      //key: _globalKey,
+      backgroundColor: ColorResources.COLOR_DARKPRIMARY,
+      body: ScaffoldMessenger(
+        key: _globalKey,
+        child: Center(
           child: Consumer<SplashProvider>(builder: (context, splash, child) {
             return Padding(
               padding: EdgeInsets.all(5),

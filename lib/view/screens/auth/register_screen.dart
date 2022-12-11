@@ -159,36 +159,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                               hasUnderLineBorder: true,
                                               controller: _fullNameController,
                                               maxLength: 50,
-                                              inputType:
-                                              TextInputType.emailAddress,
+                                              isLetters: true,
+                                              inputType: TextInputType.emailAddress,
                                               hintText: '',
                                             ),
                                           ),
                                         )
                                       ],
                                     ),
-                                    SizedBox(
-                                      height: 30,
-                                    ),
+                                    // SizedBox(
+                                    //   height: 30,
+                                    // ),
 
-                                    Text(
-                                      getTranslated('room_number', context),
-                                      style: medium.copyWith(
-                                          color: Colors.black, fontSize: 18),
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
+                                    // Text(
+                                    //   getTranslated('room_number', context),
+                                    //   style: medium.copyWith(
+                                    //       color: Colors.black, fontSize: 18),
+                                    // ),
+                                    // SizedBox(
+                                    //   height: 20,
+                                    // ),
                                     // Text(
                                     //   getTranslated('send_code', context),
                                     //   style: book.copyWith(
                                     //       color: Colors.black38, fontSize: 12),
                                     // ),
-                                    SizedBox(
-                                      height: 15,
-                                    ),
+                                    // SizedBox(
+                                    //   height: 15,
+                                    // ),
                                     Row(
-                                      children: [
+                                      children: const [
                                         // Expanded(
                                         //   flex: 1,
                                         //   child: Container(
@@ -207,21 +207,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         // SizedBox(
                                         //   width: 20,
                                         // ),
-                                        Expanded(
-                                          flex: 4,
-                                          child: Container(
-                                            height: 20,
-                                            child: CustomTextField(
-                                              defultFont: false,
-                                              hasUnderLineBorder: true,
-                                              controller: _roomNumberController,
-                                              maxLength: 50,
-                                              inputType:
-                                              TextInputType.emailAddress,
-                                              hintText: '',
-                                            ),
-                                          ),
-                                        )
+                                        // Expanded(
+                                        //   flex: 4,
+                                        //   child: Container(
+                                        //     height: 20,
+                                        //     child: CustomTextField(
+                                        //       defultFont: false,
+                                        //       hasUnderLineBorder: true,
+                                        //       controller: _roomNumberController,
+                                        //       maxLength: 50,
+                                        //       inputType:
+                                        //       TextInputType.number,
+                                        //       hintText: '',
+                                        //     ),
+                                        //   ),
+                                        // )
                                       ],
                                     ),
                                     SizedBox(
@@ -244,40 +244,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     SizedBox(
                                       height: 15,
                                     ),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          width: 70,
-                                          height: 20,
-                                          child: CustomTextField(
-                                            hasUnderLineBorder: true,
-                                            hintTextColor: Colors.black,
-                                            isShowPrefixIcon: false,
-                                            isEnabled: false,
-                                            inputType: TextInputType.phone,
-                                            hintText:
-                                                getTranslated('code', context),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Expanded(
-                                          child: Container(
+                                    Directionality(
+                                      textDirection: TextDirection.ltr,
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 70,
                                             height: 20,
                                             child: CustomTextField(
-                                              defultFont: false,
                                               hasUnderLineBorder: true,
-                                              controller: _phoneController,
-                                              maxLength: 50,
-                                              inputType:
-                                              TextInputType.emailAddress,
-                                              hintText: '',
+                                              hintTextColor: Colors.black,
+                                              isShowPrefixIcon: false,
+                                              isEnabled: false,
+                                              inputType: TextInputType.number,
+                                              hintText:
+                                                  getTranslated('code', context),
                                             ),
                                           ),
-                                          flex: 3,
-                                        )
-                                      ],
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Container(
+                                              height: 20,
+                                              child: CustomTextField(
+                                                defultFont: false,
+                                                hasUnderLineBorder: true,
+                                                controller: _phoneController,
+                                                maxLength: 50,
+                                                inputType:
+                                                TextInputType.number,
+                                                hintText: '',
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                     SizedBox(
                                       height: 15,
@@ -329,7 +332,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                               controller: _identityNUmberController,
                                               maxLength: 50,
                                               inputType:
-                                              TextInputType.emailAddress,
+                                              TextInputType.number,
                                               hintText: '',
                                             ),
                                           ),
@@ -356,7 +359,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         hasUnderLineBorder: true,
                                         controller: _passwordController,
                                         maxLength: 50,
-                                        inputType: TextInputType.emailAddress,
+                                        isPassword: true,
+                                        inputType: TextInputType.text,
                                         hintText: '',
                                       ),
                                     ),
@@ -374,8 +378,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     onTap: () {
                                       String _fullName =
                                       _fullNameController.text.trim();
-                                      String _roomNumber =
-                                      _roomNumberController.text.trim();
+                                      // String _roomNumber =
+                                      // _roomNumberController.text.trim();
                                       String _password =
                                       _passwordController.text.trim();
                                       String _phone =
@@ -389,12 +393,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 context),
                                             context);
                                       }
-                                     else if (_roomNumber.isEmpty) {
-                                        showCustomSnackBar(
-                                            getTranslated(
-                                                'enter_room_number', context),
-                                            context);
-                                      }
+                                     // else if (_roomNumber.isEmpty) {
+                                     //    showCustomSnackBar(
+                                     //        getTranslated(
+                                     //            'enter_room_number', context),
+                                     //        context);
+                                     //  }
                                      else if (_phone.isEmpty) {
                                         showCustomSnackBar(
                                             getTranslated(
@@ -414,7 +418,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 'enter_identity_number',
                                                 context),
                                             context);
-                                      } else if (_password.isEmpty) {
+                                      }
+
+                                    else if (_password.isEmpty) {
                                         showCustomSnackBar(
                                             getTranslated(
                                                 'enter_password', context),
@@ -428,7 +434,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         FocusScope.of(context)
                                             .requestFocus(FocusNode());
                                         authProvider
-                                            .checkEmail(_phone, _password)
+                                            .requestRegister(_fullName,_phone,_identityNumber, _password,context)
                                             .then((value) async {
                                           if (value.isSuccess!) {
                                             authProvider.updateEmail(_phone);
@@ -436,11 +442,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                               showCustomSnackBar(
                                                   value.message.toString(),
                                                   context);
-
                                             Navigator.pushNamed(
                                                 context,
                                                 Routes.getVerifyRoute(
                                                     'sign-up', value.phone!,value.userId!));
+                                            // Future.delayed(Duration(seconds: 3), () {
+                                            //
+                                            // });
+
 
                                             // if (value.skip_otp! /*&&value.is_user*/) {
                                             //   if (value.is_user!) {

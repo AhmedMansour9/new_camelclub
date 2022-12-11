@@ -36,4 +36,7 @@ class LocalizationProvider extends ChangeNotifier {
     sharedPreferences.setString(AppConstants.LANGUAGE_CODE, locale.languageCode);
     sharedPreferences.setString(AppConstants.COUNTRY_CODE, locale.countryCode!);
   }
+  bool isSaveLanguage() {
+    return (sharedPreferences.containsKey(AppConstants.LANGUAGE_CODE));
+  }
 }

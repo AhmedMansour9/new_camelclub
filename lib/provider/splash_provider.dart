@@ -81,7 +81,7 @@ class SplashProvider extends ChangeNotifier {
       throw e;
     }
   }
-  Future<void> saveFirstVisitOnBoarding() async {
+  Future<void> saveFirstVisitLanguage() async {
     try {
       await sharedPreferences.setBool(AppConstants.FIRST_TIME_ONBOARDING, true);
     } catch (e) {
@@ -89,7 +89,7 @@ class SplashProvider extends ChangeNotifier {
     }
   }
 
-  bool isFirstVisitOnBoarding() {
+  bool isFirstVisitLanguage() {
     return sharedPreferences.containsKey(AppConstants.FIRST_TIME_ONBOARDING)
         ? true
         : false;

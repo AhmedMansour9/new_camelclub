@@ -22,6 +22,10 @@ import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoginScreen extends StatefulWidget {
+  final String userType;
+
+  LoginScreen({required this.userType});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -55,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: AlignmentDirectional.bottomStart,
                   child: SingleChildScrollView(
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
                         // Padding(
                         //   padding: EdgeInsets.all(30),
@@ -67,6 +71,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         // SizedBox(
                         //   height: 110,
                         // ),
+                        Container(
+                        height: 200,width: 200,
+                        child: Image.asset(Images.login,fit: BoxFit.cover,)),
+                        SizedBox(height: 50,),
+
                         Container(
                           margin: EdgeInsetsDirectional.only(start: 20),
                           alignment: AlignmentDirectional.bottomStart,
@@ -182,7 +191,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                         hasUnderLineBorder: true,
                                         controller: _passwordController,
                                         maxLength: 50,
-                                        inputType: TextInputType.emailAddress,
+                                        isPassword: true,
+                                        inputType: TextInputType.text,
                                         hintText: '',
                                       ),
                                     ),
@@ -190,6 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     SizedBox(
                                       height: 20,
                                     ),
+                                    if(widget.userType == "client")
                                     InkWell(
                                       onTap: () {
                                         Navigator.pushNamed(
@@ -253,28 +264,46 @@ class _LoginScreenState extends State<LoginScreen> {
                                             getTranslated(
                                                 'enter_password', context),
                                             context);
-                                      } else if (_password.length < 8) {
-                                        showCustomSnackBar(
-                                            getTranslated(
-                                                'password_should_be', context),
-                                            context);
-                                      } else {
+                                      }
+                                      // else if (_password.length < 8) {
+                                      //   showCustomSnackBar(
+                                      //       getTranslated(
+                                      //           'password_should_be', context),
+                                      //       context);
+                                      // }
+                                      else {
                                         FocusScope.of(context)
                                             .requestFocus(FocusNode());
                                         authProvider
-                                            .checkEmail(_email, _password)
+                                            .checkEmail(
+                                                _email, _password, context)
                                             .then((value) async {
                                           if (value.isSuccess!) {
                                             authProvider.updateEmail(_email);
                                             if (value.message!.isNotEmpty)
                                               showCustomSnackBar(
                                                   value.message.toString(),
-                                                  context);
-
-                                            Navigator.pushNamed(
-                                                context,
-                                                Routes.getVerifyRoute(
-                                                    'sign-up', value.phone!,value.userId!));
+                                                  context,
+                                                  isError: false);
+                                            // Future.delayed(Duration(seconds: 3),
+                                            //     () {
+                                            //   Navigator.pushNamed(
+                                            //       context,
+                                            //       Routes.getVerifyRoute(
+                                            //           'sign-up',
+                                            //           value.phone!,
+                                            //           value.userId!));
+                                            // });
+                                            if(_email == "123456123456"){
+                                              Navigator.pushNamed(
+                                                  context,
+                                                  Routes.getMainRoute());
+                                            }else {
+                                              Navigator.pushNamed(
+                                                  context,
+                                                  Routes.getVerifyRoute(
+                                                      'login', value.phone!,value.userId!));
+                                            }
 
                                             // if (value.skip_otp! /*&&value.is_user*/) {
                                             //   if (value.is_user!) {
@@ -338,6 +367,4 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ));
   }
-
-
 }

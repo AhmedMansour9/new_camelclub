@@ -14,9 +14,12 @@ import 'package:new_camelclub/helper/router_helper.dart';
 import 'package:new_camelclub/localization/app_localization.dart';
 import 'package:new_camelclub/notification/my_notification.dart';
 import 'package:new_camelclub/provider/auth_provider.dart';
+import 'package:new_camelclub/provider/home_provider.dart';
 import 'package:new_camelclub/provider/localization_provider.dart';
 
 import 'package:new_camelclub/provider/language_provider.dart';
+import 'package:new_camelclub/provider/notifications_provider.dart';
+import 'package:new_camelclub/provider/reportsjson_provider.dart';
 import 'package:new_camelclub/provider/splash_provider.dart';
 import 'package:new_camelclub/provider/theme_provider.dart';
 import 'package:new_camelclub/theme/dark_theme.dart';
@@ -27,10 +30,10 @@ import 'package:url_strategy/url_strategy.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'di_container.dart' as di;
+import 'package:notification_permissions/notification_permissions.dart';
 
 
 
-// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   // setPathUrlStrategy();
@@ -39,19 +42,45 @@ Future<void> main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp();
   await di.init();
+  // await FirebaseMessaging.instance
+  //     .setForegroundNotificationPresentationOptions(
+  //   alert: true,
+  //   badge: true,
+  //   sound: true,
+  // );
+
+  await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
   int? _orderID;
-  // try {
-  //   // if (!kIsWeb) {
-  //   final NotificationAppLaunchDetails? notificationAppLaunchDetails = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-  //   if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
-  //     _orderID = (notificationAppLaunchDetails?.payload != null ? int.parse(notificationAppLaunchDetails!.payload!) : null)!;
-  //     // }
-  //     await MyNotification.initialize(flutterLocalNotificationsPlugin);
-  //     FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
-  //   }
-  // }catch(e) {}
+
+
+  try {
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
+    // if (!kIsWeb) {
+    // final NotificationAppLaunchDetails? notificationAppLaunchDetails = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    // if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+    //   _orderID = (notificationAppLaunchDetails?.payload != null ? int.parse(notificationAppLaunchDetails!.payload!) : null)!;
+      // }
+      await MyNotification.initialize(flutterLocalNotificationsPlugin);
+    // FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+    FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
+
+
+    // }
+  }catch(e) {}
 
   runApp(MultiProvider(
     providers: [
@@ -61,6 +90,9 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (context) => di.sl<LocalizationProvider>()),
       ChangeNotifierProvider(create: (context) => di.sl<AuthProvider>()),
       ChangeNotifierProvider(create: (context) => di.sl<LocalizationProvider>()),
+      ChangeNotifierProvider(create: (context) => di.sl<HomeProvider>()),
+      ChangeNotifierProvider(create: (context) => di.sl<NotificationsProvider>()),
+      ChangeNotifierProvider(create: (context) => di.sl<ReportssProvider>()),
     ],
     child: MyApp(orderId: _orderID, isWeb: !kIsWeb),
   ));
@@ -81,11 +113,32 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   GlobalKey<ScaffoldMessengerState> _globalKey = GlobalKey();
 
+  requestPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
   @override
-  void initState() {
+  void initState()   {
     super.initState();
     RouterHelper.setupRouter();
-
 
 
     // if(kIsWeb) {

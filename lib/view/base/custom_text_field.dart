@@ -18,6 +18,7 @@ class CustomTextField extends StatefulWidget {
   final int? maxLines;
   final int? maxLength;
   final bool? isPassword;
+  final bool? isLetters;
   final bool? isCountryPicker;
   final bool hasUnderLineBorder;
   final bool? hasBorder;
@@ -47,6 +48,7 @@ class CustomTextField extends StatefulWidget {
       this.hintTextColor = Colors.black26,
       this.nextFocus,
       this.isEnabled = true,
+      this.isLetters = false,
       this.inputType = TextInputType.text,
       this.inputAction = TextInputAction.next,
       this.maxLines = 1,
@@ -80,6 +82,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+
       maxLines: widget.maxLines,
       controller: widget.controller,
       focusNode: widget.focusNode,
@@ -102,8 +105,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
       //         FilteringTextInputFormatter.allow(RegExp('[0-9]'))
       //       ]
       //     : null,
-
+      inputFormatters: widget.isLetters == true ? [
+      FilteringTextInputFormatter(
+          RegExp("[a-zA-Z]"),
+          allow: true),
+        ] : null,
       decoration: InputDecoration(
+
         counterText: '',
         border: InputBorder.none,
         // contentPadding: EdgeInsets.symmetric(vertical: 6, horizontal: 10),

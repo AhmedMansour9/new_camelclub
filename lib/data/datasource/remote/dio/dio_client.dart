@@ -12,20 +12,24 @@ class DioClient {
 
  late Dio dio;
   String? token;
+  String? language;
 
 
   DioClient(this.baseUrl, Dio dioC, { this.loggingInterceptor, this.sharedPreferences,}) {
     token = sharedPreferences?.getString(AppConstants.TOKEN);
+    language =sharedPreferences?.getString(AppConstants.LANGUAGE_CODE);
+
     print(token);
     dio = dioC;
     dio
       ..options.baseUrl = baseUrl
-      ..options.connectTimeout = 30000
-      ..options.receiveTimeout = 30000
+      ..options.connectTimeout = 60000
+      ..options.receiveTimeout = 60000
       ..httpClientAdapter
       ..options.headers = {
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Bearer $token',
+        'Language': language ?? "ar"
       };
     dio.interceptors.add(loggingInterceptor!);
   }

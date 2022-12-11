@@ -1,5 +1,9 @@
 class Images {
   static const String logo = 'assets/image/logo.png';
+  static const String call = 'assets/image/call.png';
+  static const String login = 'assets/image/login.png';
+  static const String addPhoto = 'assets/image/add_photo.png';
+  static const String deleteReport = 'assets/image/delete_report.png';
   static const String more = 'assets/image/more_icon.png';
   static const String user = 'assets/image/user.png';
   static const String staff = 'assets/image/staff.png';
@@ -11,7 +15,7 @@ class Images {
   static const String policy = 'assets/image/policy.png';
   static const String terms = 'assets/image/terms.png';
   static const String about = 'assets/image/about.png';
-  static const String log_out = 'assets/image/log_out.png';
+  static const String log_out = 'assets/image/logout.png';
   static const String message = 'assets/image/message.png';
   static const String message_arabic = 'assets/image/message_ar.png';
   static const String order = 'assets/image/menu_order.png';
@@ -40,6 +44,7 @@ class Images {
   static const String error_page = 'assets/image/errorpage.png';
   static const String bc_language = 'assets/image/bc_language.jpg';
   static const String verify_phone = 'assets/image/phone.png';
+  static const String verify = 'assets/image/verify.png';
   static const String order_arabic = 'assets/image/order-ar.png';
   static const String cartItem = 'assets/image/cart_item.png';
   static const String trueCart = 'assets/image/true.png';
@@ -64,7 +69,7 @@ class Images {
   static const String location = 'assets/icon/location.png';
 
   // for Image
-  static const String arabic = 'assets/image/arabic.png';
+  static const String arabic = 'assets/image/saudi.png';
   static const String onboarding_one = 'assets/image/onboarding_one.png';
   static const String onboarding_three = 'assets/image/onboarding_three.png';
   static const String onboarding_two = 'assets/image/onboarding_two.png';

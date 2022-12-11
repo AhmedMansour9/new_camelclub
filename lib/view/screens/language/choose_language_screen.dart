@@ -5,6 +5,7 @@ import 'package:new_camelclub/helper/responsive_helper.dart';
 import 'package:new_camelclub/localization/language_constrants.dart';
 import 'package:new_camelclub/provider/language_provider.dart';
 import 'package:new_camelclub/provider/localization_provider.dart';
+import 'package:new_camelclub/provider/splash_provider.dart';
 import 'package:new_camelclub/utill/app_constants.dart';
 import 'package:new_camelclub/utill/color_resources.dart';
 import 'package:new_camelclub/utill/dimensions.dart';
@@ -126,7 +127,8 @@ class ChooseLanguageScreen extends StatelessWidget {
                                                       .selectIndex]
                                                   .countryCode,
                                             ));
-
+                                            Provider.of<SplashProvider>(context, listen: false).saveFirstVisitLanguage();
+                                            
                                               Navigator.pushNamedAndRemoveUntil(
                                                   context,
                                                   Routes.getChooseUserRoute(),

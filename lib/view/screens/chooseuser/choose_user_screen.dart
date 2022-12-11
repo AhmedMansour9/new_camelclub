@@ -15,6 +15,7 @@ import 'package:new_camelclub/utill/strings.dart';
 import 'package:new_camelclub/utill/styles.dart';
 import 'package:new_camelclub/view/base/custom_button.dart';
 import 'package:new_camelclub/view/base/custom_snackbar.dart';
+import 'package:new_camelclub/view/screens/auth/login_screen.dart';
 // import 'package:new_camelclub/view/base/main_app_bar.dart';
 import 'package:new_camelclub/view/screens/language/widget/search_widget.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,7 @@ class ChooseUserScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // Provider.of<ChooseUserProvider>(context, listen: false)
     //     .initializeAllLanguages(context);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.light,
         statusBarColor: ColorResources.COLOR_PRIMARY));
 
@@ -58,17 +59,17 @@ class ChooseUserScreen extends StatelessWidget {
                     //   ),
                     // ),
                     Padding(
-                      padding: EdgeInsets.all(30),
+                      padding: const EdgeInsets.all(30),
                       child: Center(
                         child: Image.asset(Images.logo,fit: BoxFit.cover,),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 185,
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(16.0),
@@ -76,7 +77,7 @@ class ChooseUserScreen extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 40,
                           ),
                           Text(
@@ -84,19 +85,20 @@ class ChooseUserScreen extends StatelessWidget {
                             style: rubikBold.copyWith(
                                 color: Colors.black, fontSize: 23),
                           ),
-                          SizedBox(height: 25),
+                          const SizedBox(height: 25),
                       InkWell(
                         onTap: () {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              Routes.getLoginUserRoute(),
-                                  (route) => false);
+                          // Navigator.pushNamedAndRemoveUntil(
+                          //     context,
+                          //     Routes.getLoginUserRoute(),
+                          //         (route) => false);
+                          Navigator.push(context,MaterialPageRoute(builder:(context)=> LoginScreen(userType: "client",) ));
 
                         },
                         child: Center(
                           child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                            padding: EdgeInsets.all(10),
+                            margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                            padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black12),
                               borderRadius: BorderRadius.circular(10),
@@ -108,7 +110,7 @@ class ChooseUserScreen extends StatelessWidget {
                                 Container(
                                   width: 25,
                                   height: 25,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
                                       image: ExactAssetImage(Images.user),
@@ -128,18 +130,20 @@ class ChooseUserScreen extends StatelessWidget {
                         ),
 
                       ),
-                          SizedBox(height: 5,),
+                          const SizedBox(height: 5,),
                           InkWell(
                             onTap: () {
-                              Navigator.pushNamedAndRemoveUntil(
-                                  context,
-                                  Routes.getLoginUserRoute(),
-                                      (route) => false);
+                            Navigator.push(context,MaterialPageRoute(builder:(context)=> LoginScreen(userType: "other_user",) ));
+
+                              // Navigator.pushNamedAndRemoveUntil(
+                              //     context,
+                              //     Routes.getLoginUserRoute(),
+                              //         (route) => false);
                             },
                             child: Center(
                               child: Container(
-                                margin: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                                padding: EdgeInsets.all(10),
+                                margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                                padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   border: Border.all(color: Colors.black12),
                                   borderRadius: BorderRadius.circular(10),
@@ -151,7 +155,7 @@ class ChooseUserScreen extends StatelessWidget {
                                     Container(
                                       width: 30,
                                       height: 30,
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         shape: BoxShape.circle,
                                         image: DecorationImage(
                                           image: ExactAssetImage(Images.staff),
@@ -171,7 +175,7 @@ class ChooseUserScreen extends StatelessWidget {
                             ),
 
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 60,
                           ),
                         ],

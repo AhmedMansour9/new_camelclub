@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:new_camelclub/helper/responsive_helper.dart';
 import 'package:new_camelclub/localization/language_constrants.dart';
 import 'package:new_camelclub/provider/auth_provider.dart';
@@ -6,6 +7,7 @@ import 'package:new_camelclub/utill/color_resources.dart';
 import 'package:new_camelclub/utill/dimensions.dart';
 import 'package:new_camelclub/utill/images.dart';
 import 'package:new_camelclub/utill/routes.dart';
+import 'package:new_camelclub/utill/strings.dart';
 import 'package:new_camelclub/utill/styles.dart';
 import 'package:new_camelclub/view/base/custom_app_bar.dart';
 import 'package:new_camelclub/view/base/custom_button.dart';
@@ -14,12 +16,26 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
 //
-class VerificationScreen extends StatelessWidget {
+class VerificationScreen extends StatefulWidget {
   final String phone;
   final String userId;
   final bool fromSignUp;
   VerificationScreen({required this.phone, this.fromSignUp = false,required this.userId });
 
+  @override
+  State<VerificationScreen> createState() => _VerificationScreenState();
+}
+
+class _VerificationScreenState extends State<VerificationScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.light,
+        statusBarColor: ColorResources.COLOR_SECONDRY));
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +52,7 @@ class VerificationScreen extends StatelessWidget {
                   SizedBox(height: 25),
                   Center(
                     child: Image.asset(
-                      Images.verify_phone,
+                      Images.verify,
                       width: 142,
                       height: 142,
                     ),
@@ -57,40 +73,45 @@ class VerificationScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Center(
                         child: Text(
-                          '$phone',
+                          '${widget.phone}',
                           textAlign: TextAlign.center,
                           style: book.copyWith(color: Colors.black , fontSize: 15 ),
                         )),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 35),
-                    child: PinCodeTextField(
-                      enablePinAutofill: true,
-                      length: 4,
-                      appContext: context,
-                      obscureText: false,
-                      keyboardType: TextInputType.number,
-                      animationType: AnimationType.fade,
-                      pinTheme: PinTheme(
-                        shape: PinCodeFieldShape.box,
-                        fieldHeight: 50,
-                        fieldWidth: 50,
-                        borderWidth: 1,
-                        borderRadius: BorderRadius.circular(55),
-                        selectedColor: ColorResources.colorMap[600],
-                        selectedFillColor: Colors.white,
-                        inactiveFillColor: Colors.white30,
-                        inactiveColor: Colors.black26,
-                        activeColor: Colors.white,
-                        activeFillColor: ColorResources.getSearchBg(context),
+                    child: Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: PinCodeTextField(
+                        enablePinAutofill: true,
+                        length: 4,
+                        appContext: context,
+                        obscureText: false,
+
+
+                        keyboardType: TextInputType.number,
+                        animationType: AnimationType.fade,
+                        pinTheme: PinTheme(
+                          shape: PinCodeFieldShape.box,
+                          fieldHeight: 50,
+                          fieldWidth: 50,
+                          borderWidth: 1,
+                          borderRadius: BorderRadius.circular(55),
+                          selectedColor: ColorResources.colorMap[600],
+                          selectedFillColor: Colors.white,
+                          inactiveFillColor: Colors.white30,
+                          inactiveColor: Colors.black26,
+                          activeColor: Colors.white,
+                          activeFillColor: ColorResources.getSearchBg(context),
+                        ),
+                        animationDuration: Duration(milliseconds: 300),
+                        backgroundColor: Colors.white,
+                        enableActiveFill: true,
+                        onChanged: authProvider.updateVerificationCode,
+                        beforeTextPaste: (text) {
+                          return true;
+                        },
                       ),
-                      animationDuration: Duration(milliseconds: 300),
-                      backgroundColor: Colors.white,
-                      enableActiveFill: true,
-                      onChanged: authProvider.updateVerificationCode,
-                      beforeTextPaste: (text) {
-                        return true;
-                      },
                     ),
                   ),
                   // Row(
@@ -165,9 +186,15 @@ class VerificationScreen extends StatelessWidget {
                         //     }
                         //   });
                         // }else {
-                          Provider.of<AuthProvider>(context, listen: false).verifyToken(userId).then((value) {
+                          Provider.of<AuthProvider>(context, listen: false).verifyToken(widget.userId,context,widget.fromSignUp).then((value) {
                             if(value.isSuccess!) {
-                              // Navigator.pushNamed(context, Routes.getNewPassRoute(phone, authProvider.verificationCode));
+                              String userType=authProvider.getUserType();
+                              if(userType == "client"){
+                                Navigator.pushNamedAndRemoveUntil(context, Routes.getMainCLientRoute(),(route) => false);
+
+                              }else {
+                                Navigator.pushNamedAndRemoveUntil(context, Routes.getMainRoute(),(route) => false);
+                              }
                             }else {
                               showCustomSnackBar(value.message!, context);
                             }
@@ -187,5 +214,4 @@ class VerificationScreen extends StatelessWidget {
 
 
   }
- 
 }

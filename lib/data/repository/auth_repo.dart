@@ -87,9 +87,9 @@ class AuthRepo {
     }
   }
 
-  Future<ApiResponse> verifyToken(String email, String token) async {
+  Future<ApiResponse> verifyToken(String email, String token,bool isRegister) async {
     try {
-      Response response = await dioClient.post(AppConstants.VERIFY_TOKEN_URI, data: {"userId": email, "code": token});
+      Response response = await dioClient.post(AppConstants.VERIFY_TOKEN_URI, data: {"userId": email, "code": token,"isRegister":isRegister});
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(ApiErrorHandler.getMessage(e));
@@ -128,6 +128,28 @@ class AuthRepo {
     }
   }
 
+  Future<ApiResponse> requestRegister(String fullName,String phoneNumber,String identityNumber,String password) async {
+    try {
+      dioClient.token = '';
+      dioClient.dio.options.headers = {'Content-Type': 'application/json; charset=UTF-8', 'Authorization': ''};
+      await sharedPreferences.remove(AppConstants.TOKEN);
+      await sharedPreferences.remove("registered");
+     // await sharedPreferences.remove(AppConstants.USER_ADDRESS);
+     // await sharedPreferences.remove(AppConstants.SEARCH_ADDRESS);
+
+      // String? deviceId = await _getId();
+      String? deviceId ='';
+      // print({"phone": email,"device_id":deviceId??''}.toString());
+      var roles =[];
+      Response response = await dioClient.post(AppConstants.REGISTER_URI, data: {"fullName": fullName,
+        "phoneNumber": phoneNumber,"userType": "1","identityNumber": identityNumber,"password":password??'',
+       "roles" : roles});
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.getMessage(e));
+    }
+  }
+
   // Future<String?> _getId() async {
   //   var deviceInfo = DeviceInfoPlugin();
   //   if (Platform.isIOS) { // import 'dart:io'
@@ -149,12 +171,22 @@ class AuthRepo {
   }
 
   // for  user token
-  Future<void> saveUserToken(String token) async {
+  Future<void> saveUserToken(String token,) async {
+    String? language = sharedPreferences.getString(AppConstants.LANGUAGE_CODE);
     dioClient.token = token;
-    dioClient.dio.options.headers = {'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer $token'};
+    dioClient.dio.options.headers = {'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer $token', 'Language': language ?? "ar"};
 
     try {
       await sharedPreferences.setString(AppConstants.TOKEN, token);
+    } catch (e) {
+      throw e;
+    }
+  }
+  Future<void> saveUserInformation(String idNumber,String Phone) async {
+
+    try {
+      await sharedPreferences.setString("id_number", idNumber);
+      await sharedPreferences.setString("phone", Phone);
     } catch (e) {
       throw e;
     }
@@ -169,24 +201,55 @@ class AuthRepo {
       throw e;
     }
   }
+  Future<void> saveUserId(String userId) async {
+
+    try {
+      await sharedPreferences.setString("userId", userId);
+    } catch (e) {
+      throw e;
+    }
+  }
+  Future<void> saveuserType(String userType) async {
+
+    try {
+      await sharedPreferences.setString("userType", userType);
+    } catch (e) {
+      throw e;
+    }
+  }
 
   String getUserToken() {
     return sharedPreferences.getString(AppConstants.TOKEN) ?? "";
   }
+  String getUserType() {
+    return sharedPreferences.getString("userType") ?? "";
+  }
+  String getIdumber() {
+    return sharedPreferences.getString("id_number") ?? "";
+  }
+  String getPhone() {
+    return sharedPreferences.getString("phone") ?? "";
+  }
 
   bool isLoggedIn() {
-    return (sharedPreferences.containsKey(AppConstants.TOKEN)&&sharedPreferences.containsKey("registered"));
+    return (sharedPreferences.containsKey(AppConstants.TOKEN));
   }
 
   Future<bool> clearSharedData() async {
-    if(!kIsWeb) {
-      await FirebaseMessaging.instance.unsubscribeFromTopic(AppConstants.TOPIC);
-    }
+    // if(!kIsWeb) {
+    //   await FirebaseMessaging.instance.unsubscribeFromTopic(AppConstants.TOPIC);
+    // }
     await sharedPreferences.remove(AppConstants.TOKEN);
     await sharedPreferences.remove("registered");
     await sharedPreferences.remove(AppConstants.CART_LIST);
     await sharedPreferences.remove(AppConstants.USER_ADDRESS);
     await sharedPreferences.remove(AppConstants.SEARCH_ADDRESS);
+    await sharedPreferences.remove("categoriesNames");
+    await sharedPreferences.remove("categoriesIds");
+    await sharedPreferences.remove("officesIds");
+    await sharedPreferences.remove("regionsIds");
+    await sharedPreferences.remove("regionsNames");
+    await sharedPreferences.remove("officesNames");
     return true;
   }
 
