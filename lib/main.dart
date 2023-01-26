@@ -44,12 +44,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await di.init();
-  // await FirebaseMessaging.instance
-  //     .setForegroundNotificationPresentationOptions(
-  //   alert: true,
-  //   badge: true,
-  //   sound: true,
-  // );
+
 
   await FirebaseMessaging.instance.requestPermission(
     alert: true,

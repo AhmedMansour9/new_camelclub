@@ -14,10 +14,8 @@ import 'package:new_camelclub/utill/dimensions.dart';
 import 'package:new_camelclub/utill/images.dart';
 import 'package:new_camelclub/utill/styles.dart';
 import 'package:new_camelclub/view/base/custom_button.dart';
-import 'package:new_camelclub/view/base/main_app_bar.dart';
 import 'package:new_camelclub/view/screens/auth/sign_out_confirmation_dialog.dart';
 import 'package:new_camelclub/view/screens/home/dialog_fullscreen_image.dart';
-import 'package:new_camelclub/view/screens/subcategory/SubCategory.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:provider/provider.dart';
